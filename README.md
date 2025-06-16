@@ -198,9 +198,9 @@ For complete documentation, visit [Commands.com/docs](https://commands.com/docs)
 
 ## 📈 Stats
 
-![GitHub Discussions](https://img.shields.io/github/discussions/commands-com/discussions)
-![GitHub Issues](https://img.shields.io/github/issues/commands-com/discussions)
-![Community Size](https://img.shields.io/badge/community-growing-brightgreen)
+![GitHub Discussions](https://img.shields.io/badge/discussions-active-blue?logo=github)
+![Community](https://img.shields.io/badge/community-growing-brightgreen)
+![Platform](https://img.shields.io/badge/platform-live-success)
 
 ---
 
