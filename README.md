@@ -1,209 +1,261 @@
 # Commands.com
 
-Welcome to the official GitHub repository for **Commands.com** - the platform for sharing and discovering reusable CLI commands and AI prompts.
+The platform for creating, sharing, and discovering reusable AI commands and prompts with Model Context Protocol (MCP) integration.
 
-## 🚀 What is Commands.com?
+## 🚀 Quick Start: Create Your First MCP Server
 
-Commands.com is a community-driven platform where developers and creators can:
+Get started in seconds with our MCP creation tool:
 
-- **Share CLI commands and scripts** with automatic GitHub synchronization
-- **Create and distribute AI prompts** with dynamic placeholders
-- **Monetize content** through direct creator payments via Stripe Connect
-- **Discover solutions** from a growing library of community contributions
-- **Collaborate** with other developers and prompt engineers
-
-## 📋 Table of Contents
-
-- [Platform Features](#-platform-features)
-- [Getting Started](#-getting-started)
-- [Community Guidelines](#-community-guidelines)
-- [Contributing](#-contributing)
-- [Commands.yaml Format](#-commandsyaml-format)
-- [Support](#-support)
-- [Resources](#-resources)
-
-## ✨ Platform Features
-
-### For Creators
-- **GitHub Integration**: Automatic sync of commands.yaml files from your repositories
-- **Direct Payments**: Receive 85% of sales directly via Stripe Connect
-- **Content Management**: Organize commands and prompts with categories and tags
-- **Analytics**: Track performance and revenue in real-time
-- **Global Reach**: Accept payments in 40+ countries and multiple currencies
-
-### For Users
-- **Search & Discovery**: Find exactly what you need with powerful search
-- **Try Before You Buy**: Preview content before purchasing
-- **Copy & Execute**: One-click copying with syntax highlighting
-- **Dynamic Prompts**: Customize AI prompts with interactive placeholders
-- **Purchase History**: Access all your bought content anytime
-
-## 🎯 Getting Started
-
-### As a User
-1. Visit [Commands.com](https://commands.com)
-2. Browse the catalog or search for specific solutions
-3. Try free content or purchase premium commands/prompts
-4. Copy commands directly to your terminal or AI platform
-
-### As a Creator
-1. **Set up your profile** at [Commands.com/profile](https://commands.com/profile)
-2. **Connect GitHub** to sync your repositories automatically
-3. **Create commands.yaml files** in your repositories
-4. **Connect Stripe** to receive direct payments
-5. **Start earning** from your shared knowledge
-
-### Repository Setup
 ```bash
-# Clone your repository
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
-
-# Create a commands.yaml file
-touch commands.yaml
-
-# Add your first command
-cat > commands.yaml << 'EOF'
-commands:
-  - name: hello-world
-    description: "A simple hello world command"
-    type: cli
-    category: "Development"
-    main: scripts/hello.sh
-    languageTag: "bash"
-EOF
-
-# Create the script
-mkdir -p scripts
-echo '#!/bin/bash\necho "Hello, Commands.com!"' > scripts/hello.sh
-chmod +x scripts/hello.sh
-
-# Commit and push
-git add .
-git commit -m "Add first command"
-git push origin main
+npx create-commands-mcp my-server
+cd my-server
+npm install
+npm start
 ```
 
-## 🤝 Community Guidelines
+That's it! You now have a working MCP server ready to customize.
 
-We're building an inclusive, helpful community. Please:
+## 📋 What is Commands.com?
 
-### ✅ Do
-- Be respectful and constructive in all interactions
-- Help others learn and solve problems
-- Share knowledge and best practices openly
-- Give proper credit for inspiration or derived work
-- Report security vulnerabilities responsibly
-- Follow our [Code of Conduct](CODE_OF_CONDUCT.md)
+Commands.com is a platform that makes it easy to:
 
-### ❌ Don't
-- Share malicious, harmful, or insecure code
-- Spam or promote unrelated content
-- Harass, discriminate, or exclude others
-- Share personal or confidential information
-- Violate intellectual property rights
-- Post off-topic content in discussions
+- **Create powerful AI commands** with parameterized templates and MCP server integration
+- **Share your prompts** with the developer community
+- **Discover curated solutions** from our marketplace
+- **Build MCP servers** using our intuitive creation tools
+- **Monetize your work** through our creator program
 
-## 🛠 Contributing
+## 🛠 Commands & Prompts YAML Format
 
-We welcome contributions to improve the platform! Here's how you can help:
-
-### Platform Development
-- Report bugs in [Issues](https://github.com/commands-com/discussions/issues)
-- Suggest features in [Discussions](https://github.com/commands-com/discussions/discussions)
-- Contribute to documentation improvements
-
-### Content Creation
-- Share high-quality commands and prompts
-- Improve existing content through collaboration
-- Create educational content and tutorials
-
-### Community Support
-- Help answer questions in Discussions
-- Welcome new community members
-- Share the platform with fellow developers
-
-## 📄 Commands.yaml Format
-
-The `commands.yaml` file is the standard format for defining commands and prompts:
+Commands.com uses a powerful YAML format to define reusable AI commands and prompts:
 
 ### Basic Structure
+
 ```yaml
 commands:
-  - name: unique-command-name
-    description: "Clear description of what this does"
-    type: cli  # or "prompt"
-    category: "Development"
-    main: path/to/script.sh
-    languageTag: "bash"  # for CLI commands
-    platformTag: "ChatGPT-4o"  # for AI prompts
-    readme: path/to/README.md
-    license: LICENSE
+  - name: "Screenshot Website"
+    type: "prompt"              # Either "prompt" or "command"
+    category: "productivity"    
+    description: "Take a screenshot of any website URL"
+    content: |
+      Please take a screenshot of the following website: {{url}}
+      
+      Capture the full page and save it as a high-quality image.
+    inputParameters:
+      - name: "url"
+        label: "Website URL"
+        description: "The URL of the website to screenshot"
+        type: "text"
+        required: true
+        defaultValue: ""
+    mcpRequirements:
+      - serverId: "puppeteer"
+        tier: "required"
+        version: "1.0.0"
+    aiPlatform: "claude-code@2025.06"
 ```
 
-### Dynamic AI Prompts
+### Input Parameters
+
+Define template variables that users can customize:
+
 ```yaml
-commands:
-  - name: code-reviewer
-    description: "AI prompt for thorough code reviews"
-    type: prompt
-    category: "Development"
-    main: prompts/code-review.template
-    platformTag: "ChatGPT-4o"
-    placeholders:
-      - name: LANGUAGE
-        label: "Programming language"
-        default: "JavaScript"
-      - name: FOCUS_AREA
-        label: "Review focus"
-        default: "security and performance"
+inputParameters:
+  - name: "parameter_name"      # Used in {{parameter_name}} templating
+    label: "Human Readable Label"
+    description: "Description of the parameter"
+    type: "text"               # Types: text, path, number, select, textarea
+    required: true
+    defaultValue: "default"
+    options: ["option1", "option2"]  # For select type only
 ```
 
-### Repository Configuration
+**Available Types:**
+- `text` - Single line text input
+- `textarea` - Multi-line text input
+- `path` - File or directory path
+- `number` - Numeric input
+- `select` - Dropdown selection (requires `options`)
+
+### MCP Requirements
+
+Specify which MCP servers your command needs:
+
 ```yaml
-# Global settings for the entire repository
-repository:
-  license: LICENSE
-  description: "My collection of useful development tools"
+mcpRequirements:
+  - serverId: "puppeteer"      # Curated server ID
+    tier: "required"           # "required" or "optional"
+    version: "1.0.0"          # Optional minimum version
 ```
 
-For complete documentation, visit [Commands.com/docs](https://commands.com/docs).
+**Available Curated Servers:**
+- `puppeteer` - Browser automation
+- `memory` - Persistent memory storage
+- `filesystem` - File system operations
+- `sqlite` - SQLite database access
+- `github` - GitHub integration
+- `calendar` - Calendar management
+- `email` - Email functionality
+- [View all 22+ servers](https://commands.com/mcp-servers)
 
-## 💬 Support
+## 🎯 Example Commands
 
-### Community Support
-- **GitHub Discussions**: [Technical discussions and feature requests](https://github.com/commands-com/discussions/discussions)
-- **Discord**: [Real-time community chat](https://discord.gg/commands-com)
+### Web Research Command
+```yaml
+- name: "Research and Document"
+  type: "command"
+  category: "research"
+  description: "Research topic with screenshots and notes"
+  content: |
+    Research {{topic}} by:
+    1. Taking screenshots of {{num_sites}} relevant websites
+    2. Storing key findings in memory
+    3. Creating a summary document
+  inputParameters:
+    - name: "topic"
+      label: "Research Topic"
+      type: "text"
+      required: true
+    - name: "num_sites"
+      label: "Number of Sites"
+      type: "number"
+      required: true
+      defaultValue: "5"
+  mcpRequirements:
+    - serverId: "puppeteer"
+      tier: "required"
+    - serverId: "memory"
+      tier: "required"
+    - serverId: "filesystem"
+      tier: "optional"
+  aiPlatform: "claude-code@2025.06"
+```
 
-### Direct Contact
-- **General Support**: [support@commands.com](mailto:support@commands.com)
-- **Business Inquiries**: [business@commands.com](mailto:business@commands.com)
-- **Security Issues**: [security@commands.com](mailto:security@commands.com)
+### Database Query Prompt
+```yaml
+- name: "SQL Report Generator"
+  type: "prompt"
+  category: "development"
+  description: "Generate reports from SQL queries"
+  content: |
+    Connect to {{database_path}} and run the following query:
+    
+    {{query}}
+    
+    Format the results as a {{format}} report.
+  inputParameters:
+    - name: "database_path"
+      label: "Database Path"
+      type: "path"
+      required: true
+    - name: "query"
+      label: "SQL Query"
+      type: "textarea"
+      required: true
+    - name: "format"
+      label: "Output Format"
+      type: "select"
+      required: true
+      defaultValue: "markdown"
+      options: ["markdown", "csv", "json", "html"]
+  mcpRequirements:
+    - serverId: "sqlite"
+      tier: "required"
+  aiPlatform: "claude-code@2025.06"
+```
 
-### Response Times
-- **Discord/Community**: Usually within minutes during active hours
-- **Email Support**: 24-48 hours for general inquiries
-- **Security Issues**: Within 24 hours for urgent matters
+## 📚 Documentation
 
-## 📚 Resources
+### Getting Started
+- **[Quick Start Guide](https://commands.com/docs/getting-started)** - Create your first command
+- **[YAML Schema Reference](https://commands.com/docs/yaml-schema)** - Complete format documentation
+- **[Template Variables](https://commands.com/docs/templates)** - Using input parameters
 
-- **[Platform Documentation](https://commands.com/docs)**: Complete technical guides
-- **[Getting Started Guide](https://commands.com/getting-started)**: New user walkthrough
-- **[FAQs](https://commands.com/faqs)**: Common questions and answers
-- **[Community Support](https://commands.com/community)**: Help and discussion channels
+### MCP Integration
+- **[MCP Overview](https://commands.com/docs/mcp/overview)** - Understanding Model Context Protocol
+- **[Available Servers](https://commands.com/mcp-servers)** - Browse all 22+ curated servers
+- **[Creating MCP Servers](https://commands.com/docs/mcp/create)** - Build custom servers
+
+### Publishing & Monetization
+- **[Publishing Guide](https://commands.com/docs/publishing)** - Share with the community
+- **[Creator Program](https://commands.com/docs/creators)** - Monetization options
+- **[Best Practices](https://commands.com/docs/best-practices)** - Quality guidelines
+
+## 🚦 Getting Started
+
+1. **Create your commands.yaml**
+   ```yaml
+   commands:
+     - name: "My First Command"
+       type: "prompt"
+       category: "productivity"
+       description: "A helpful command"
+       content: "Do something with {{input}}"
+       inputParameters:
+         - name: "input"
+           label: "Input"
+           type: "text"
+           required: true
+       aiPlatform: "claude-code@2025.06"
+   ```
+
+2. **Test locally**
+   Use the Commands.com CLI or Claude Desktop to test
+
+3. **Publish to GitHub**
+   Add `commands.yaml` to your repository
+
+4. **Import to Commands.com**
+   Connect your GitHub repo on the platform
+
+5. **Share with the community**
+   Your commands are now discoverable!
+
+## 🤝 Community
+
+- **[Discord](https://discord.gg/commands-com)** - Join our developer community
+- **[GitHub Discussions](https://github.com/commands-com/discussions)** - Technical discussions
+- **[Showcase](https://commands.com/showcase)** - Featured commands and creators
+
+## 💡 Use Cases
+
+Commands.com enables powerful workflows:
+
+- **Automated Testing** - Run test suites with parameterized inputs
+- **Content Generation** - Create blogs, docs, and reports
+- **Code Analysis** - Review and refactor codebases
+- **Data Processing** - Transform and analyze datasets
+- **DevOps Automation** - Deploy and monitor infrastructure
+- **Research Tools** - Gather and synthesize information
+
+## 📈 For Creators
+
+### Monetization Options
+- **Free Tier** - Share open-source commands
+- **Premium Commands** - Charge for advanced functionality
+- **Subscriptions** - Recurring revenue models
+- **Custom Solutions** - Enterprise offerings
+
+### Creator Benefits
+- **85% Revenue Share** - Keep most of what you earn
+- **Direct Payments** - Via Stripe Connect
+- **Analytics Dashboard** - Track usage and earnings
+- **Marketing Support** - Featured placement opportunities
+
+## 🔗 Resources
+
+- **[Commands.com](https://commands.com)** - Main platform
+- **[Documentation](https://commands.com/docs)** - Complete docs
+- **[NPM Package](https://www.npmjs.com/package/create-commands-mcp)** - MCP creation tool
+- **[GitHub](https://github.com/Commands-com/create-commands-mcp)** - Source code
+- **[Blog](https://commands.com/blog)** - Updates and tutorials
 
 ## 🏷 Tags
 
-`cli` `commands` `automation` `ai-prompts` `developer-tools` `open-source` `community` `github-integration` `stripe-connect` `monetization`
-
-## 📈 Stats
-
-![GitHub Discussions](https://img.shields.io/badge/discussions-active-blue?logo=github)
-![Community](https://img.shields.io/badge/community-growing-brightgreen)
-![Platform](https://img.shields.io/badge/platform-live-success)
+`mcp` `model-context-protocol` `claude` `ai-commands` `ai-prompts` `automation` `developer-tools` `yaml` `cli`
 
 ---
 
-**Join thousands of developers sharing and discovering powerful commands and prompts at [Commands.com](https://commands.com)**
+**Start building powerful AI commands today at [Commands.com](https://commands.com)**
 
-Built with ❤️ by the open source community
+Built with ❤️ by the Commands.com team
